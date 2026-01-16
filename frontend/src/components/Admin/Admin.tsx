@@ -1,32 +1,10 @@
 import { useEffect, useState } from "react";
 import styles from "./Admin.module.css";
-import type { Laptop } from "../../helpers/Laptop";
+import { type Laptop, blank_laptop } from "../../helpers/Laptop";
 
 function Admin() {
   const [laptops, setLaptops] = useState<Laptop[]>([]);
-  const [formData, setFormData] = useState<Laptop>({
-    asin: "",
-    model_number: "",
-    model_name: "",
-    brand: "",
-    storage_capacity: "",
-    cpu: "",
-    cpu_cores: "",
-    cpu_clock: "",
-    ram_type: "",
-    ram_capacity: "",
-    touch_screen: "",
-    screen_size: "",
-    screen_width: "",
-    screen_height: "",
-    screen_refresh: "",
-    battery_capacity: "",
-    year: "",
-    gpu_type: "",
-    gpu: "",
-    rating: "",
-    price: "",
-  });
+  const [formData, setFormData] = useState<Laptop>(blank_laptop);
 
   useEffect(() => {
     fetch("http://localhost:8000/load-all")
@@ -86,6 +64,7 @@ function Admin() {
           />
           <button onClick={handleSearch}>Search</button>
           <button onClick={handleLoad}>Load</button>
+          <button onClick={() => setFormData(blank_laptop)}>Reset</button>
         </div>
         <hr />
         <div className={styles.features}>

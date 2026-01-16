@@ -22,4 +22,28 @@ interface Laptop {
   year: string;
 }
 
-export type { Laptop };
+const blank_laptop = {
+  asin: "",
+  model_number: "",
+  model_name: "",
+  brand: "",
+  storage_capacity: "",
+  cpu: "",
+  cpu_cores: "",
+  cpu_clock: "",
+  ram_type: "",
+  ram_capacity: "",
+  gpu_type: "",
+  gpu: "",
+  screen_size: "",
+  screen_width: "",
+  screen_height: "",
+  screen_refresh: "",
+  touch_screen: "",
+  battery_capacity: "",
+  price: "",
+  rating: "",
+  year: "",
+};
+
+export { type Laptop, blank_laptop };
