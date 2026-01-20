@@ -1,4 +1,5 @@
 interface Laptop {
+  id: number;
   asin: string;
   title: string;
   model_number: string;
@@ -17,13 +18,15 @@ interface Laptop {
   screen_refresh: string;
   battery_capacity: string;
   year: string;
-  gpu_type: boolean;
+  dedicated_gpu: boolean;
   gpu: string;
   rating: string;
   price: string;
+  used: boolean;
 }
 
 const blank_laptop = {
+  id: 0,
   asin: "",
   title: "",
   model_number: "",
@@ -42,10 +45,11 @@ const blank_laptop = {
   screen_refresh: "",
   battery_capacity: "",
   year: "",
-  gpu_type: false,
+  dedicated_gpu: false,
   gpu: "",
   rating: "",
   price: "",
+  used: false,
 };
 
 export { type Laptop, blank_laptop };

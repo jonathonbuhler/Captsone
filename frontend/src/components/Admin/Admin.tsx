@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import styles from "./Admin.module.css";
 import { type Laptop, blank_laptop } from "../../helpers/Laptop";
+import { getLaptops } from "../../helpers/db";
 
 function Admin() {
   const [laptops, setLaptops] = useState<Laptop[]>([]);
@@ -8,10 +9,7 @@ function Admin() {
   const [valid, setValid] = useState<string>("");
 
   useEffect(() => {
-    fetch("http://localhost:8000/load-all")
-      .then((res) => res.json())
-      .then((data) => setLaptops(data))
-      .catch((err) => console.error(err));
+    getLaptops().then((l) => setLaptops(l));
   }, []);
 
   const handleEdit = () => {
@@ -50,7 +48,7 @@ function Admin() {
     if (!name) {
       return;
     }
-    if (name == "gpu_type" || name == "touch_screen") {
+    if (name == "dedicated_gpu" || name == "touch_screen" || name == "used") {
       setFormData((prev) => ({
         ...prev,
         [name]: e.target.value == "true" ? true : false,
@@ -100,7 +98,11 @@ function Admin() {
         <hr />
         <div className={styles.features}>
           {Object.keys(formData).map((item, i) => {
-            if (item == "gpu_type" || item == "touch_screen") {
+            if (
+              item == "dedicated_gpu" ||
+              item == "touch_screen" ||
+              item == "used"
+            ) {
               return (
                 <div key={i} className={styles.textInput}>
                   <label htmlFor={item}>{item}</label>
@@ -155,7 +157,7 @@ function Admin() {
                       <td>{l[d as keyof typeof l].toString().slice(0, 20)}</td>
                     );
                   }
-                  return <td>{l[d as keyof typeof l]}</td>;
+                  return <td>{String(l[d as keyof typeof l])}</td>;
                 })}
               </tr>
             ))}

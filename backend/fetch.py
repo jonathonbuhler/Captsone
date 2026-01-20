@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 HEADERS = {
     "User-Agent": (
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 11_15_7) "
         "AppleWebKit/537.36 (KHTML, like Gecko) "
         "Chrome/120.0.0.0 Safari/537.36"
     ),
@@ -14,6 +14,7 @@ HEADERS = {
 
 
 class Laptop(BaseModel):
+    id: int
     asin: str
     title: Optional[str] = ""
     model_number: Optional[str] = ""
@@ -32,10 +33,11 @@ class Laptop(BaseModel):
     screen_refresh: Optional[int] = 0
     battery_capacity: Optional[int] = 0
     year: Optional[int] = 0
-    gpu_type: Optional[bool] = None
+    dedicated_gpu: Optional[bool] = None
     gpu: Optional[str] = ""
     rating: Optional[float] = 0.0
     price: Optional[float] = 0.0
+    used: Optional[bool] = False
 
 def fetch_laptop(asin):
     url = f"https://amazon.com/dp/{asin}"
@@ -67,8 +69,11 @@ def fetch_laptop(asin):
     # 2. Detail Bullets Section
     detail_rows = soup.select("#productDetails_detailBullets_sections1 tr")
     for row in detail_rows:
+        
         key = row.select_one("th")
         val = row.select_one("td")
+
+        print("Key Value", key, val)
         if isinstance(val,str):
             val = val.replace("\u200e", "")
         if key and val:
@@ -84,68 +89,110 @@ def fetch_laptop(asin):
                 v = v.replace("\u200e", "")
             tech_details[k.lower()] = v
 
+
     print(tech_details)  # debug
 
+    storage_capacity = 0
+    if tech_details.get("hard drive"):
+        storage_capacity = tech_details.get("hard drive").lower()
+        storage_capacity = "".join(c for c in storage_capacity if c.isdigit() and c != "t" and c != "g" and c != "b")
+        if "tb" in storage_capacity:
+            storage_capacity = int(storage_capacity.replace("tb", "").strip())*1000
+        elif "gb" in storage_capacity:
+            storage_capacity = int(storage_capacity.replace("gb", "").strip())
     
-    storage_capacity = tech_details.get("hard drive")
-    storage_capacity = storage_capacity.replace("SSD","")
-    storage_capacity = storage_capacity.replace("\u200e", "")
-    if "TB" in storage_capacity:
-        storage_capacity = int(storage_capacity.replace("TB", "").strip())*1000
-    elif "GB" in storage_capacity:
-        storage_capacity = int(storage_capacity.replace("GB", "").strip())
     
-    
-    cpu_cores = tech_details.get("number of processors")
-    cpu_cores = cpu_cores.replace("\u200e", "")
+    cpu_cores = 0
+    if tech_details.get("number of processors"):        
+        cpu_cores = tech_details.get("number of processors")
+        cpu_cores = cpu_cores.replace("\u200e", "")
 
-    rating = rating_tag.get_text(strip=True) if rating_tag else None
-    rating = rating[0:2]
+    rating = 0
+    if rating_tag:
+        rating = rating_tag.get_text(strip=True)
+        rating = rating[0:3]
     
-    screen_size = tech_details.get("standing screen display size")
-    screen_size = screen_size.replace("\u200e", "")
-    screen_size = screen_size.replace("Inches", "")
+    screen_size = 0
+    if tech_details.get("standing screen display size"):
+        screen_size = tech_details.get("standing screen display size")
+        screen_size = screen_size.replace("\u200e", "")
+        screen_size = screen_size.replace("Inches", "")
 
-    price = price_tag.get_text(strip=True) if price_tag else None
-    price = price.replace("$", "")
-    price = price.replace(",", "")
+    price = 0
+    if price_tag:
+        price = price_tag.get_text(strip=True) if price_tag else None
+        price = price.replace("$", "")
+        price = price.replace(",", "")
 
-    ram_capacity = tech_details.get("ram")
-    ram_capacity = ram_capacity.replace("GB","").replace("\u200e","").replace("DDR5","").replace("DDR4","").replace("LP","")
-
-    screen_width = tech_details.get("screen resolution")
-    screen_width = screen_width.replace("\u200e","").replace("pixels","")
-    screen_width = screen_width.split("x")[0]
+    ram_type = ""
+    if tech_details.get("computer memory type"):
+        ram_type = tech_details.get("computer memory type").replace("SDRAM","")
     
-    screen_height = tech_details.get("screen resolution")
-    screen_height = screen_height.replace("\u200e","").replace("pixels","")
-    screen_height = screen_height.split("x")[1]
 
-    gpu_type = tech_details.get("card description")
-    gpu_type = gpu_type.replace("\u200e","").strip()    
-    gpu_type = gpu_type == "Dedicated"
+    ram_capacity = 0
+    if tech_details.get("ram"):
+        ram_capacity = tech_details.get("ram")
+        ram_capacity = "".join(c for c in ram_capacity if c.isdigit())
+        ram_capacity = ram_capacity[:len(ram_capacity)-1]
+        if ram_capacity == "":
+            ram_capacity = 0
+
+    screen_width = 0
+    if tech_details.get("screen resolution"):
+        screen_width = tech_details.get("screen resolution")
+        screen_width = screen_width.replace("\u200e","").replace("pixels","")
+        screen_width = screen_width.split("x")[0]
     
+    screen_height = 0
+    if tech_details.get("screen resolution"):
+        screen_height = tech_details.get("screen resolution")
+        screen_height = screen_height.replace("\u200e","").replace("pixels","")
+        if len(screen_height.split("x")) > 1:
+            screen_height = screen_height.split("x")[1]
+
+    dedicated_gpu = False
+    if tech_details.get("card description"):
+        dedicated_gpu = tech_details.get("card description")
+        dedicated_gpu = dedicated_gpu.replace("\u200e","").strip()    
+        dedicated_gpu = dedicated_gpu == "Dedicated"
+
+    touch_screen = False
+    used = False
+    if title_tag:
+        ttext = title_tag.get_text().lower()
+        touch_screen = "touchscreen" in ttext or "touch" in ttext
+        used = "renewed" in ttext or "refurbished" in ttext or "used" in ttext
+
+    model_number = ""
+    if tech_details.get("series"):
+        model_number = tech_details.get("series")
+    if not model_number and tech_details.get("item model number"):
+        model_number = tech_details.get("item model number")
+
+
 
     return Laptop(        
+        id=0,
         asin=asin,
         title=title_tag.get_text(strip=True) if title_tag else "",
         model_name=tech_details.get("model name"),
-        model_number=tech_details.get("series"),
+        model_number=model_number,
         price=price,        
         storage_capacity=storage_capacity,
         cpu=tech_details.get("processor series"),
         cpu_cores=cpu_cores,
-        ram_type=tech_details.get("computer memory type"),
+        ram_type=ram_type,
         ram_capacity=ram_capacity,
         brand=tech_details.get("brand"),
         year=tech_details.get("model year"),
-        touch_screen=tech_details.get("touch screen type"),
+        touch_screen=touch_screen,
         screen_size=screen_size,
         screen_width=screen_width,
         screen_height=screen_height,
         screen_refresh=tech_details.get("refresh rate"),
         battery_capacity=tech_details.get("lithium-battery energy content"),
-        gpu_type=gpu_type,
+        dedicated_gpu=dedicated_gpu,
         gpu=tech_details.get("graphics coprocessor"),
-        rating=rating
+        rating=rating,
+        used=used
     )
