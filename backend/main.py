@@ -1,7 +1,9 @@
+import time
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fetch import fetch_laptop, Laptop
-import numpy as np
+from fetch import fetch_laptop, Laptop, fetch_image
+import pandas as pd
+
 import db
 import asyncio
 
@@ -18,7 +20,23 @@ app.add_middleware(
 @app.on_event("startup")
 async def startup():
     await db.main()
-    
+
+        
+
+@app.get("/admin/load-imgs")
+async def load_imgs():
+    df = pd.read_csv("laptop.csv")
+    for i,row in df.iterrows():
+        if i < 42:
+            continue
+        print("loading", row["asin"])
+        img_url = fetch_image(row["asin"])
+        await db.add_img(img_url, row["asin"])
+        print("added img")
+        time.sleep(10)
+
+
+
     
 
 @app.get("/admin/{asin}")
@@ -58,5 +76,10 @@ async def edit_laptop(laptop: Laptop):
     await db.edit_row(laptop)
     return {"message": "Successful edit"}
 
+@app.get("/load-shop")
+async def load_shop():
+    df = pd.read_csv("laptop.csv")
+    df = df.sort_values(by="id")
+    return df.to_dict(orient="records")
 
-    
+

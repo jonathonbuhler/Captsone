@@ -23,6 +23,7 @@ interface Laptop {
   rating: string;
   price: string;
   used: boolean;
+  img_url: string;
 }
 
 const blank_laptop = {
@@ -50,6 +51,7 @@ const blank_laptop = {
   rating: "",
   price: "",
   used: false,
+  img_url: "",
 };
 
 export { type Laptop, blank_laptop };

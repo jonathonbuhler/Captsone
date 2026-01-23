@@ -106,3 +106,8 @@ async def load_one(asin):
         if row:
             return dict(row)
         return None
+
+async def add_img(img_url, asin):
+    global pool
+    async with pool.acquire() as conn:
+        await conn.execute("""UPDATE laptop SET img_url = $1 WHERE asin = $2""", img_url, asin)

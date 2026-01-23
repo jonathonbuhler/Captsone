@@ -9,4 +9,13 @@ async function getLaptops(): Promise<Laptop[]> {
   return laptops;
 }
 
+async function loadShop(): Promise<Laptop[]> {
+  const res = await fetch("http://localhost:8000/load-shop");
+  if (!res.ok) {
+    throw new Error("Error loading shop");
+  }
+  const laptops = res.json();
+  return laptops;
+}
+
 export { getLaptops };

@@ -1,11 +1,13 @@
+import time
 import requests
 from bs4 import BeautifulSoup
 from typing import Optional
 from pydantic import BaseModel
 
+
 HEADERS = {
     "User-Agent": (
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 11_15_7) "
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
         "AppleWebKit/537.36 (KHTML, like Gecko) "
         "Chrome/120.0.0.0 Safari/537.36"
     ),
@@ -38,6 +40,7 @@ class Laptop(BaseModel):
     rating: Optional[float] = 0.0
     price: Optional[float] = 0.0
     used: Optional[bool] = False
+    img_url: Optional[str] = ""
 
 def fetch_laptop(asin):
     url = f"https://amazon.com/dp/{asin}"
@@ -52,6 +55,8 @@ def fetch_laptop(asin):
     price_tag = soup.select_one(".a-price .a-offscreen")
     rating_tag = soup.select_one("#averageCustomerReviews .a-icon-alt") \
              or soup.select_one(".averageStarRating .a-icon-alt")
+    img_tag = soup.select_one("#landingImage")
+    
     
     tech_details = {}
 
@@ -168,8 +173,15 @@ def fetch_laptop(asin):
         model_number = tech_details.get("series")
     if not model_number and tech_details.get("item model number"):
         model_number = tech_details.get("item model number")
-
-
+    
+    img_url = ""
+    if img_tag:
+        if img_tag.get("data-old-hires"):
+            img_url = img_tag.get("data-old-hires")
+        elif img_tag.get("src"):
+            img_url = img_tag.get("src")
+        
+    
 
     return Laptop(        
         id=0,
@@ -194,5 +206,24 @@ def fetch_laptop(asin):
         dedicated_gpu=dedicated_gpu,
         gpu=tech_details.get("graphics coprocessor"),
         rating=rating,
-        used=used
+        used=used,
+        img_url = img_url
     )
+
+
+def fetch_image(asin):
+    time.sleep(10)    
+    url = f"https://amazon.com/dp/{asin}"
+    resp = requests.get(url, headers=HEADERS, timeout=15)
+    soup = BeautifulSoup(resp.text, "html.parser")
+
+    img_tag = soup.select_one("#landingImage")
+    img_url = img_tag.get("data-old-hires")
+    return img_url
+    
+
+     
+
+
+
+
