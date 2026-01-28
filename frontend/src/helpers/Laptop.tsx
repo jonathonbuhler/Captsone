@@ -21,12 +21,12 @@ interface Laptop {
   dedicated_gpu: boolean;
   gpu: string;
   rating: string;
-  price: string;
+  price: number;
   used: boolean;
   img_url: string;
 }
 
-const blank_laptop = {
+const blank_laptop: Laptop = {
   id: 0,
   asin: "",
   title: "",
@@ -49,7 +49,7 @@ const blank_laptop = {
   dedicated_gpu: false,
   gpu: "",
   rating: "",
-  price: "",
+  price: 0,
   used: false,
   img_url: "",
 };

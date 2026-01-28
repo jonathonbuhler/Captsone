@@ -152,7 +152,7 @@ function Admin() {
                   </a>
                 </td>
                 {Object.keys(l).map((d, j) => {
-                  if (d == "title") {
+                  if (d == "title" || d == "img_url") {
                     return (
                       <td>{l[d as keyof typeof l].toString().slice(0, 20)}</td>
                     );

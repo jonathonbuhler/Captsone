@@ -1,5 +1,5 @@
 import time
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fetch import fetch_laptop, Laptop, fetch_image
 import pandas as pd
@@ -77,9 +77,7 @@ async def edit_laptop(laptop: Laptop):
     return {"message": "Successful edit"}
 
 @app.get("/load-shop")
-async def load_shop():
-    df = pd.read_csv("laptop.csv")
-    df = df.sort_values(by="id")
-    return df.to_dict(orient="records")
+async def load_shop(req: Request):
+    return await db.load_shop(req)
 
 

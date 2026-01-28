@@ -1,8 +1,11 @@
+from fastapi import Query, Request
+from typing import Optional
 import asyncpg as apg
 import asyncio
 from dotenv import load_dotenv
 import os
 import pandas as pd
+from pydantic import BaseModel
 from fetch import Laptop
 
 load_dotenv()
@@ -111,3 +114,90 @@ async def add_img(img_url, asin):
     global pool
     async with pool.acquire() as conn:
         await conn.execute("""UPDATE laptop SET img_url = $1 WHERE asin = $2""", img_url, asin)
+
+
+async def load_shop(req: Request):
+    q = dict(req.query_params)
+
+    brand = q.get("brand")
+    price_min = q.get("price_min")
+    price_max = q.get("price_max")    
+    ram_type = q.get("ram_type")
+    ram_min = q.get("ram_min")
+    ram_max = q.get("ram_max")
+    storage_min = q.get("storage_min")
+    storage_max = q.get("storage_max")
+    touch_screen = q.get("touch_screen")
+    screen_size_min = q.get("screen_size_min")
+    screen_size_max = q.get("screen_size_max")
+    used = q.get("used")
+
+    price_min = float(price_min) if price_min else None
+    price_max = float(price_max) if price_max else None
+    ram_min = int(ram_min) if ram_min else None
+    ram_max = int(ram_max) if ram_max else None
+    storage_min = int(storage_min) if storage_min else None
+    storage_max = int(storage_max) if storage_max else None
+    screen_size_min = float(screen_size_min) if screen_size_min else None
+    screen_size_max = float(screen_size_max) if screen_size_max else None
+    if used is not None:
+        used = used.lower() == "true"
+    if touch_screen is not None:
+        touch_screen = touch_screen.lower() == "true"
+
+    global pool
+    async with pool.acquire() as conn:
+        params = []
+        i=1
+        stmt = "SELECT * FROM laptop WHERE 1=1 "
+        if (brand):
+            stmt += f"AND brand = ${i} "
+            i+=1
+            params.append(brand)
+        if (price_min):
+            stmt += f"AND price >= ${i} "
+            i+=1
+            params.append(price_min)
+        if (price_max):
+            stmt += f"AND price <= ${i} "
+            i+=1
+            params.append(price_max)
+        if (ram_type):
+            stmt += f"AND ram_type = ${i} "
+            i+=1
+            params.append(ram_type)
+        if (ram_min):
+            stmt += f"AND ram_capacity >= ${i} "
+            i+=1
+            params.append(ram_min)
+        if (ram_max):
+            stmt += f"AND ram_capacity <= ${i} "
+            i+=1
+            params.append(ram_max)
+        if (storage_min):
+            stmt += f"AND storage_capacity >= ${i} "
+            i+=1
+            params.append(storage_min)
+        if (storage_max):
+            stmt += f"AND storage_capacity <= ${i} "
+            i+=1
+            params.append(storage_max)
+        if (touch_screen is not None):
+            stmt += f"AND touch_screen = ${i} "
+            i+=1
+            params.append(touch_screen)
+        if (screen_size_min):
+            stmt += f"AND screen_size >= ${i} "
+            i+=1
+            params.append(screen_size_min)
+        if (screen_size_max):
+            stmt += f"AND screen_size <= ${i} "
+            i+=1
+            params.append(screen_size_max)
+        if (used is not None):
+            stmt += f"AND used = ${i} "
+            i+=1
+            params.append(used)
+
+        rows = await conn.fetch(stmt,*params)
+        return [dict(row) for row in rows]
