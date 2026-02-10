@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import type { Laptop } from "../../helpers/Laptop";
 import styles from "./Shop.module.css";
 import Filters from "./Filters/Filters";
+import { Link } from "react-router-dom";
 
 function Shop() {
   const [laptops, setLaptops] = useState<Laptop[]>([]);
@@ -24,7 +25,7 @@ function Shop() {
         <div className={styles.items}>
           {laptops.map((l, i) => {
             return (
-              <div className={styles.laptop} key={i}>
+              <Link to={`/laptop/${l.id}`} className={styles.laptop} key={i}>
                 <img src={l.img_url} alt="" />
                 <a href={`https://www.amazon.com/dp/${l.asin}`} target="_blank">
                   <p>
@@ -32,9 +33,8 @@ function Shop() {
                     {l.title.length > 75 ? "..." : ""}
                   </p>
                 </a>
-
                 <p>${l.price.toFixed(2)}</p>
-              </div>
+              </Link>
             );
           })}
         </div>
