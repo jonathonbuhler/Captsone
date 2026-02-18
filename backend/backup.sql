@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict ou6igM0nnSX1dwkMMMRRyVUkdA92gGBeLdE56222eesKFhRnbj3iz5xTL9TJ7ep
+\restrict OmDiBEBi1m8enquEfBcnb0t4HtyLt0eLyRAg4fiCX4YxOjpwTdzph7uB0ijdYkU
 
 -- Dumped from database version 16.11 (Ubuntu 16.11-0ubuntu0.24.04.1)
 -- Dumped by pg_dump version 16.11 (Ubuntu 16.11-0ubuntu0.24.04.1)
@@ -214,5 +214,5 @@ ALTER TABLE ONLY public.laptop
 -- PostgreSQL database dump complete
 --
 
-\unrestrict ou6igM0nnSX1dwkMMMRRyVUkdA92gGBeLdE56222eesKFhRnbj3iz5xTL9TJ7ep
+\unrestrict OmDiBEBi1m8enquEfBcnb0t4HtyLt0eLyRAg4fiCX4YxOjpwTdzph7uB0ijdYkU
 
