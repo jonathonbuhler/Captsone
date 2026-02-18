@@ -12,15 +12,6 @@ function Shop() {
   const [wordLim, setWordLim] = useState(0);
 
   useEffect(() => {
-    fetch("http://localhost:8000/load-shop")
-      .then((res) => res.json())
-      .then((data) => {
-        setLaptops(data);
-      })
-      .catch((err) => console.error(err));
-  }, []);
-
-  useEffect(() => {
     if (width > 1100) {
       setWordLim(80);
     } else if (width > 800) {

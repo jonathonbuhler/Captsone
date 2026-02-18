@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./Filters.module.css";
 import type { Laptop } from "../../../helpers/Laptop";
 
@@ -20,8 +20,12 @@ function Filters({ setLaptops }: FilterProps) {
     touch_screen: undefined,
     screen_size_min: undefined,
     screen_size_max: undefined,
-    used: undefined,
+    used: false,
   });
+
+  useEffect(() => {
+    handleFilter();
+  }, []);
 
   const handleChange = (
     e:
@@ -148,7 +152,7 @@ function Filters({ setLaptops }: FilterProps) {
         onChange={handleChange}
         value={filters.screen_size_max}
       />
-      <select name="used" value={filters.used} onChange={handleChange}>
+      <select name="used" value={String(filters.used)} onChange={handleChange}>
         <option value="false">New</option>
         <option value="true">Used / Refurbished</option>
         <option value="all">All</option>

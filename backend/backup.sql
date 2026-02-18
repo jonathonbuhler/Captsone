@@ -2,10 +2,10 @@
 -- PostgreSQL database dump
 --
 
-\restrict d14omMAoPS0XVQAhkws1GSlFnhLfYEtLzKhAJXblR0XbwxRSh6ItKpXkvHYH1cf
+\restrict ou6igM0nnSX1dwkMMMRRyVUkdA92gGBeLdE56222eesKFhRnbj3iz5xTL9TJ7ep
 
--- Dumped from database version 14.20 (Homebrew)
--- Dumped by pg_dump version 14.20 (Homebrew)
+-- Dumped from database version 16.11 (Ubuntu 16.11-0ubuntu0.24.04.1)
+-- Dumped by pg_dump version 16.11 (Ubuntu 16.11-0ubuntu0.24.04.1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -189,6 +189,9 @@ COPY public.laptop (id, asin, title, model_number, model_name, brand, storage_ca
 71	B0CXKXNNPX	Microsoft Surface Pro 2-in-1 Laptop/Tablet (2024), Windows 11 Copilot+ PC, 13" Touchscreen OLED Display, Snapdragon X Elite (12 Core), 16GB RAM, 256GB Storage, Black, Amazon Exclusive	EP2-05006	‎Surface Pro	‎Microsoft	256	Snapdragon X Elite	12	4.3	LPDDR5	16	t	13	2560	1600	60	48	2024	f	‎ARM Mali T604	4.5	1149.99	f	https://m.media-amazon.com/images/I/617kakTyb3L._AC_SL1500_.jpg	834.99
 72	B0CXLBL7LV	Microsoft Surface Pro 2-in-1 Laptop/Tablet (2024), 13" OLED Touchscreen Display, 16GB RAM, 512GB Storage | Windows 11 Copilot+ PC, Snapdragon X Elite (12 Core), Black	‎Surface Pro	ZIA-00018	‎Microsoft	512	Snapdragon X Elite	12	3.4	DDR5	16	t	13	2880	1920	60	48	2024	f	Snapdragon X Elite Graphics	4.5	1049.99	f	https://m.media-amazon.com/images/I/51QVdaQQx+L._AC_SL1009_.jpg	1082.66
 73	B0CXL5272V	Microsoft Surface Pro 2-in-1 Laptop/Tablet (2024), Windows 11 Copilot+ PC, 13" Touchscreen Display, Snapdragon X Plus (10 Core), 16GB RAM, 256GB Storage, Platinum	ZHX-00001	Surface Pro	‎Microsoft	256	Snapdragon X Plus	10	4	LPDDR5	16	t	13	2560	1600	60	48	2024	f	‎Adreno	4.5	965.99	f	https://m.media-amazon.com/images/I/61OtnPzSv6L._AC_SL1500_.jpg	834.99
+113	B0DZZWMB2L	ASUS ROG Strix G16 (2025) Gaming Laptop, 16” FHD+ 16:10 165Hz/3ms Display, NVIDIA® GeForce RTX™ 5060 Laptop GPU, Intel® Core™ i7 Processor 14650HX, 16GB DDR5, 1TB Gen 4 SSD, Wi-Fi 7, Windows 11 Home	G615JMR-AS74	‎ROG Strix G16	‎ASUS	1000	Intel Core i7 14650HX	16	5.2	DDR5	16	f	16	1920	1200	165	90	2025	t	GeForce RTX 5060	4.4	1399.99	f	https://m.media-amazon.com/images/I/81n1T4CYfmL._AC_SL1500_.jpg	0
+114	B0DW1FVPK8	ASUS ROG Strix G16 (2025) Gaming Laptop, 16” ROG Nebula 16:10 2.5K 240Hz/3ms, NVIDIA® GeForce RTX™ 5080, Intel® Core Ultra 9 275HX, 32GB DDR5, 1TB PCIe Gen 4 SSD, Wi-Fi 7, Windows 11 Home, G615LW-AS96	6cf3a541-d3ae-4645-b191-13068180d8c7	‎ROG Strix G16	‎ASUS	1000	Intel Core Ultra 9 275HX	24	5.4	DDR5	32	f	16	2560	1600	240	90	2025	t	GeForce RTX 5080	4.4	2899.99	f	https://m.media-amazon.com/images/I/71WH7jtyWpL._AC_SL1500_.jpg	0
+115	B0DW1X5YCQ	ASUS ROG Strix G16 (2025) Gaming Laptop, 16” ROG Nebula Display 16:10 2.5K 240Hz/3ms, NVIDIA® GeForce RTX™ 5070 Ti GPU, Intel® Core™ Ultra 9 275HX Processor, 32GB DDR5, 1TB SSD, Wi-Fi 7, Win11 Home	G615LR-AS96	‎ROG Strix G16	‎ASUS	1000	Intel Core Ultra 9 275HX	24	5.4	DDR5	32	f	16	2560	1600	240	90	2025	t	GeForce RTX 5070 TI	4.4	2399.99	f	https://m.media-amazon.com/images/I/71WH7jtyWpL._AC_SL1500_.jpg	0
 \.
 
 
@@ -196,7 +199,7 @@ COPY public.laptop (id, asin, title, model_number, model_name, brand, storage_ca
 -- Name: laptop_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
 --
 
-SELECT pg_catalog.setval('public.laptop_id_seq', 112, true);
+SELECT pg_catalog.setval('public.laptop_id_seq', 115, true);
 
 
 --
@@ -211,5 +214,5 @@ ALTER TABLE ONLY public.laptop
 -- PostgreSQL database dump complete
 --
 
-\unrestrict d14omMAoPS0XVQAhkws1GSlFnhLfYEtLzKhAJXblR0XbwxRSh6ItKpXkvHYH1cf
+\unrestrict ou6igM0nnSX1dwkMMMRRyVUkdA92gGBeLdE56222eesKFhRnbj3iz5xTL9TJ7ep
 
