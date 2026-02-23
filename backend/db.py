@@ -205,3 +205,23 @@ async def load_shop(req: Request):
         stmt += "LIMIT 33"
         rows = await conn.fetch(stmt,*params)
         return [dict(row) for row in rows]
+    
+
+async def load_ml():
+    global pool
+    async with pool.acquire() as conn:
+        rows = await conn.fetch("""SELECT 
+                    id,storage_capacity,cpu_cores,cpu_clock,ram_type,
+                    ram_capacity,touch_screen,screen_size,screen_refresh,
+                    battery_capacity,year,dedicated_gpu,rating,price,used
+                    FROM laptop ORDER BY id DESC""")
+        return [dict(row) for row in rows]
+    
+
+async def update_fair_prices(df):
+    async with pool.acquire() as conn:
+        update_values = [(float(row["fair_price"]), int(idx)) for idx, row in df.iterrows()]
+        await conn.executemany(
+            "UPDATE laptop SET fair_price = $1 WHERE id = $2;",
+            update_values
+        )

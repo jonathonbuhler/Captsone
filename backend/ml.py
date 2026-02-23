@@ -1,45 +1,32 @@
 import asyncio
-import asyncpg
 import pandas as pd
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.preprocessing import StandardScaler
 
-df = pd.read_csv("backend/ml.csv", index_col="id")
 
-df = pd.get_dummies(df, columns=["ram_type"])
+async def update_fair(laptops):
+    df = pd.DataFrame(laptops)
+    df = df.set_index("id")
 
-X = df.drop(columns=["price"])
-y = df["price"]
+    df = pd.get_dummies(df, columns=["ram_type"])
+    X = df.drop(columns=["price"])
+    y = df["price"]
+    sc = StandardScaler()
+    sc.fit(X)
+    X = sc.transform(X)
 
-sc = StandardScaler()
-sc.fit(X)
-X = sc.transform(X)
+    knn = KNeighborsRegressor(n_neighbors=3)
+    knn.fit(X,y)
 
-knn = KNeighborsRegressor(n_neighbors=3)
-knn.fit(X,y)
+    fair_price = knn.predict(X)
+    for i,p in enumerate(fair_price):
+        fair_price[i] = round(p, 2)    
+    df["fair_price"] = fair_price
+    print(df.head())
 
-fair_price = knn.predict(X)
-for i,p in enumerate(fair_price):
-    fair_price[i] = round(p, 2)
-
-
-
-df["fair_price"] = fair_price
-
-async def update_fair_prices():
-    conn = await asyncpg.connect(
-        user="admin",
-        password="7Ne9!@fh*z",
-        database="capstone",
-        host="localhost"
-    )
-    update_values = [(float(row["fair_price"]), int(idx)) for idx, row in df.iterrows()]
-    await conn.executemany(
-        "UPDATE laptop SET fair_price = $1 WHERE id = $2;",
-        update_values
-    )
-
-    await conn.close()
+    return df
 
 
-print(df.head())
+
+
+

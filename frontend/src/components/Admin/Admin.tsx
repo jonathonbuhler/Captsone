@@ -77,6 +77,13 @@ function Admin() {
     console.log(formData);
   };
 
+  const handleUpdateML = async () => {
+    await fetch(`http://localhost:8000/admin/update-fair`)
+      .then((res) => res.json())
+      .then((data) => console.log(data))
+      .catch((err) => console.error(err));
+  };
+
   return (
     <div className="main-container">
       <div className={styles["add-data"]}>
@@ -94,6 +101,7 @@ function Admin() {
           <button onClick={() => handleLoad(formData.asin)}>Load</button>
           <button onClick={() => setFormData(blank_laptop)}>Reset</button>
           <button onClick={handleCheck}>Check</button>
+          <button onClick={handleUpdateML}>Update ML</button>
           <p>In database: {valid}</p>
         </div>
         <hr />
@@ -143,6 +151,7 @@ function Admin() {
               <th>asin</th>
               <th>title</th>
               <th>price</th>
+              <th>fair-price</th>
             </tr>
           </thead>
           <tbody>
@@ -171,6 +180,7 @@ function Admin() {
                   </Link>
                 </td>
                 <td>${l.price.toFixed(2)}</td>
+                <td>${l.fair_price.toFixed(2)}</td>
               </tr>
             ))}
           </tbody>

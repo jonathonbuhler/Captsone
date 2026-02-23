@@ -3,6 +3,7 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fetch import fetch_laptop, Laptop, fetch_image
 import pandas as pd
+import ml
 
 import db
 import asyncio
@@ -33,12 +34,7 @@ async def load_imgs():
         print("added img")
         time.sleep(10)
 
-@app.get("/admin/{asin}")
-async def load_laptop_from_amazon(asin: str):
-    if len(asin) != 10:
-        raise HTTPException(status_code=400, detail="Invalid Asin")
-    laptop = fetch_laptop(asin)
-    return laptop
+
 
 @app.get("/admin/check/{asin}")
 async def check_laptop(asin):
@@ -78,4 +74,16 @@ async def edit_laptop(laptop: Laptop):
 async def load_shop(req: Request):
     return await db.load_shop(req)
 
+@app.get("/admin/update-fair")
+async def update_fair():
+    laptops = await db.load_ml()
+    df = await ml.update_fair(laptops)
+    await db.update_fair_prices(df)
+    return {"message": "success"}
 
+@app.get("/admin/{asin}")
+async def load_laptop_from_amazon(asin: str):
+    if len(asin) != 10:
+        raise HTTPException(status_code=400, detail="Invalid Asin")
+    laptop = fetch_laptop(asin)
+    return laptop
