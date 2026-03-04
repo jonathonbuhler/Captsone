@@ -65,13 +65,19 @@ function Shop() {
               onClick={() => setPage((prev) => prev - 1)}
               disabled={page == 0}
             >
-              {"<"}
+              <i
+                className="fa-solid fa-arrow-down"
+                style={{ transform: "rotate(90deg)" }}
+              ></i>
             </button>
             <button
               disabled={lastPage}
               onClick={() => setPage((prev) => prev + 1)}
             >
-              {">"}
+              <i
+                className="fa-solid fa-arrow-down"
+                style={{ transform: "rotate(-90deg)" }}
+              ></i>
             </button>
             <p>Page: {page + 1}</p>
           </div>
