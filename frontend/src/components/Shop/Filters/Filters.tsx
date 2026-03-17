@@ -23,6 +23,7 @@ function Filters({ setLaptops, page }: FilterProps) {
     screen_size_max: undefined,
     used: false,
     offset: undefined,
+    sort_by: "percent_diff",
   });
 
   useEffect(() => {
@@ -84,6 +85,15 @@ function Filters({ setLaptops, page }: FilterProps) {
       <select name="brand" value={filters.brand} onChange={handleChange}>
         <option value="all">All</option>
         <option value="Apple">Apple</option>
+        <option value="Alienware">Alienware</option>
+        <option value="Microsoft">Microsoft</option>
+        <option value="HP">HP</option>
+        <option value="ASUS">ASUS</option>
+        <option value="Samsung">Samsung</option>
+        <option value="Lenovo">Lenovo</option>
+        <option value="Acer">Acer</option>
+        <option value="Dell">Dell</option>
+        <option value="KAIGERR">KAIGERR</option>
       </select>
       <input
         value={filters.price_min}
@@ -101,6 +111,7 @@ function Filters({ setLaptops, page }: FilterProps) {
       />
       <select name="ram_type" onChange={handleChange} value={filters.ram_type}>
         <option value="all">All</option>
+        <option value="DDR3">DDR3</option>
         <option value="DDR4">DDR4</option>
         <option value="DDR5">DDR5</option>
         <option value="LPDDR5">LPDDR5</option>

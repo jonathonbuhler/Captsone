@@ -133,6 +133,7 @@ async def load_shop(req: Request):
     screen_size_max = q.get("screen_size_max")
     used = q.get("used")
     offset = q.get("offset")
+    sort_by = q.get("sort_by")
 
     price_min = float(price_min) if price_min else None
     price_max = float(price_max) if price_max else None
@@ -143,6 +144,7 @@ async def load_shop(req: Request):
     screen_size_min = float(screen_size_min) if screen_size_min else None
     screen_size_max = float(screen_size_max) if screen_size_max else None
     offset = int(offset) if offset else None
+    
 
     if used is not None:
         used = used.lower() == "true"
@@ -153,7 +155,11 @@ async def load_shop(req: Request):
     async with pool.acquire() as conn:
         params = []
         i=1
-        stmt = "SELECT * FROM laptop WHERE 1=1 "
+        stmt = """
+        SELECT *,
+        (price - fair_price) / NULLIF(fair_price, 0) AS percent_diff
+        FROM laptop
+        WHERE 1=1 """
         if (brand):
             stmt += f"AND brand = ${i} "
             i+=1
@@ -204,10 +210,13 @@ async def load_shop(req: Request):
             params.append(used)
         if (search):
             stmt += f"AND LOWER(title) LIKE '%{search.lower()}%' "
+        if (sort_by):
+            stmt += f"ORDER BY percent_diff "
         if (offset):
             stmt += f"OFFSET ${i} "
             i+=1
             params.append(offset)
+        
 
         stmt += "LIMIT 33"
         rows = await conn.fetch(stmt,*params)

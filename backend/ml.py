@@ -21,7 +21,10 @@ async def update_fair(laptops):
     for i,p in enumerate(fair_price):
         fair_price[i] = round(p, 2)    
     df["fair_price"] = fair_price
+    
     print(df.head())
+
+    df.to_csv("ml.csv")
 
     return df
 

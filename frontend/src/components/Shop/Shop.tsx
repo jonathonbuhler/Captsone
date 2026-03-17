@@ -55,6 +55,18 @@ function Shop() {
                     >
                       Fair Price: ${l.fair_price}
                     </p>
+                    <p
+                      className={
+                        l.price < l.fair_price ? styles.good : styles.bad
+                      }
+                    >
+                      Percent Diff: {l.price < l.fair_price ? "" : "+"}
+                      {(
+                        ((l.price - l.fair_price) / l.fair_price) *
+                        100
+                      ).toFixed(1)}
+                      %
+                    </p>
                   </div>
                 </Link>
               );
