@@ -168,11 +168,11 @@ function Filters({ setLaptops, page }: FilterProps) {
         value={filters.screen_size_max}
       />
       <select name="used" value={String(filters.used)} onChange={handleChange}>
+        <option value="all">All</option>
         <option value="false">New</option>
         <option value="true">Used / Refurbished</option>
-        <option value="all">All</option>
       </select>
-      <button onClick={handleFilter}>Load</button>
+      <button onClick={handleFilter}>Search</button>
     </form>
   );
 }
