@@ -3,6 +3,35 @@
   justify-content: end;
   align-items: end;
   width: 100%;
-  max-width: 1140px;
+  max-width: 1360px;
+}
+
+.other button:hover,
+.other button:focus,
+.other button {
+  color: rgb(0, 102, 255);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
   padding: 10px;
+  gap: 5px;
+  min-width: 400px;
+}
+
+.form input,
+.form select {
+  padding: 3px;
+  border: 1px solid grey;
+  border-radius: 5px;
+  background-color: transparent;
+}
+
+.form button {
+  color: white;
+}
+
+.form button:hover {
+  color: grey;
 }
