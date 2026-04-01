@@ -1,17 +1,24 @@
-import { useState } from "react";
 import styles from "./Other.module.css";
 import Price from "./Price";
-import { type FilterProps } from "../Filters/Filters";
 import Personalization from "./Personalization";
+import type { Laptop } from "../../../helpers/Laptop";
+import type { FilterProps } from "../Filters/Filters";
 
-function Other({ setLaptops, page, filters, setFilters }: FilterProps) {
+function Other({
+  setLaptops,
+  filters,
+  page,
+  setFilters,
+  laptops,
+}: FilterProps) {
   return (
     <div className={styles.other}>
       <Price />
       <Personalization
+        laptops={laptops}
         setLaptops={setLaptops}
-        page={page}
         filters={filters}
+        page={page}
         setFilters={setFilters}
       />
     </div>

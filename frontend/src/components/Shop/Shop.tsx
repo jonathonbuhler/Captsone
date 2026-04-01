@@ -38,9 +38,10 @@ function Shop() {
       <h1>Shop</h1>
       <Other
         setLaptops={setLaptops}
-        page={page}
-        setFilters={setFilters}
         filters={filters}
+        setFilters={setFilters}
+        laptops={laptops}
+        page={page}
       />
       <div className={styles.shop}>
         <Filters
@@ -48,6 +49,7 @@ function Shop() {
           filters={filters}
           setLaptops={setLaptops}
           page={page}
+          laptops={laptops}
         />
         <div>
           <div className={styles.items}>
@@ -66,7 +68,7 @@ function Shop() {
                         l.price < l.fair_price ? styles.good : styles.bad
                       }
                     >
-                      Fair Price: ${l.fair_price}
+                      Fair Price: ${l.fair_price.toFixed(2)}
                     </p>
                     <p
                       className={

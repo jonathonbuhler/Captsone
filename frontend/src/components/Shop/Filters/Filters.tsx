@@ -4,13 +4,20 @@ import type { Laptop } from "../../../helpers/Laptop";
 import { type Filter, filterFetch } from "../../../helpers/filter";
 
 interface FilterProps {
+  laptops: Laptop[];
   setLaptops: React.Dispatch<React.SetStateAction<Laptop[]>>;
   filters: Filter;
   setFilters: React.Dispatch<React.SetStateAction<Filter>>;
   page: number;
 }
 
-function Filters({ setLaptops, page, filters, setFilters }: FilterProps) {
+function Filters({
+  setLaptops,
+  laptops,
+  page,
+  filters,
+  setFilters,
+}: FilterProps) {
   useEffect(() => {
     handleFilter();
   }, [page]);

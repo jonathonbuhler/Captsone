@@ -28,14 +28,25 @@
   background-color: transparent;
 }
 
-.form button {
+.form button,
+.checkboxes button {
   color: white;
 }
 
-.form button:hover {
+.form button:hover,
+.checkboxes button:hover {
   color: white;
 }
 
-.form button:focus {
+.form button:focus,
+.checkboxes button:focus {
   color: white;
+}
+
+.checkboxes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 15px;
+  min-width: 500px;
+  gap: 10px;
 }

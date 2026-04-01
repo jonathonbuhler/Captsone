@@ -74,12 +74,19 @@ async def edit_laptop(laptop: Laptop):
 
 @app.get("/load-shop")
 async def load_shop(req: Request):
-    return await db.load_shop(req)
+    q = req.query_params
+    laptops = await db.load_shop(q)    
+    return laptops
 
-@app.get("/admin/update-fair")
-async def update_fair():
+
+@app.get("/update-fair")
+async def update_fair(req: Request):
+    q = req.query_params
+    p = q.get("preferences")
+    if not p:
+        p=[]
     laptops = await db.load_ml()
-    df = await ml.train(laptops)
+    df = await ml.train(laptops, p)
     await db.update_fair_prices(df)
     return {"message": "success"}
 

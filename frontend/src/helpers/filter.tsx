@@ -14,6 +14,7 @@ interface Filter {
   used: boolean | undefined;
   offset: number | undefined;
   sort_by: string | undefined;
+  preferences: string[] | undefined;
 }
 
 const blank_filter: Filter = {
@@ -32,6 +33,7 @@ const blank_filter: Filter = {
   used: false,
   offset: undefined,
   sort_by: "percent_diff",
+  preferences: undefined,
 };
 
 const filterFetch = (
@@ -43,7 +45,11 @@ const filterFetch = (
 
   Object.entries({ ...filters, offset: page * 33 }).forEach(([key, value]) => {
     if (value !== undefined) {
-      params.append(key, String(value));
+      if (Array.isArray(value)) {
+        value.forEach((item) => params.append(key, item));
+      } else {
+        params.append(key, String(value));
+      }
     }
   });
   fetch(`http://localhost:8000/load-shop?${params.toString()}`).then((res) =>

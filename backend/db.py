@@ -116,9 +116,7 @@ async def add_img(img_url, asin):
         await conn.execute("""UPDATE laptop SET img_url = $1 WHERE asin = $2""", img_url, asin)
 
 
-async def load_shop(req: Request):
-    q = dict(req.query_params)
-
+async def load_shop(q):    
     search = q.get("search")
     brand = q.get("brand")
     price_min = q.get("price_min")
@@ -134,6 +132,8 @@ async def load_shop(req: Request):
     used = q.get("used")
     offset = q.get("offset")
     sort_by = q.get("sort_by")
+
+    
 
     price_min = float(price_min) if price_min else None
     price_max = float(price_max) if price_max else None
